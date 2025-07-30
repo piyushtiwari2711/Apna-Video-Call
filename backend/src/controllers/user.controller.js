@@ -1,4 +1,3 @@
-import httpStatus from "http-status";
 import { User } from "../models/user.model.js";
 import bcrypt, { hash } from "bcryptjs"
 
@@ -15,7 +14,7 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({ username });
         if (!user) {
-            return res.status(httpStatus.NOT_FOUND).json({ message: "User Not Found" })
+            return res.status(404).json({ message: "User Not Found" })
         }
 
 
@@ -26,9 +25,9 @@ const login = async (req, res) => {
 
             user.token = token;
             await user.save();
-            return res.status(httpStatus.OK).json({ token: token })
+            return res.status(200).json({ token: token })
         } else {
-            return res.status(httpStatus.UNAUTHORIZED).json({ message: "Invalid Username or password" })
+            return res.status(401).json({ message: "Invalid Username or password" })
         }
 
     } catch (e) {
@@ -44,7 +43,7 @@ const register = async (req, res) => {
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-            return res.status(httpStatus.FOUND).json({ message: "User already exists" });
+            return res.status(200).json({ message: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,7 +56,7 @@ const register = async (req, res) => {
 
         await newUser.save();
 
-        res.status(httpStatus.CREATED).json({ message: "User Registered" })
+        res.status(200).json({ message: "User Registered" })
 
     } catch (e) {
         res.json({ message: `Something went wrong ${e}` })
@@ -91,7 +90,7 @@ const addToHistory = async (req, res) => {
 
         await newMeeting.save();
 
-        res.status(httpStatus.CREATED).json({ message: "Added code to history" })
+        res.status(200).json({ message: "Added code to history" })
     } catch (e) {
         res.json({ message: `Something went wrong ${e}` })
     }
