@@ -73,18 +73,20 @@ export default function Authentication() {
                 <Grid
                     item
                     xs={false}
-                    sm={4}
+                    sm={5}
                     md={7}
                     sx={{
-                        backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+                        backgroundImage: "url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1400&q=80')",
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
+                        display: { xs: 'none', sm: 'block' },
+                        transition: 'background-image 0.5s ease',
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <Grid item xs={12} sm={7} md={5} component={Paper} elevation={8} square sx={{ background: 'rgba(255,255,255,0.98)' }}>
                     <Box
                         sx={{
                             my: 8,
@@ -94,33 +96,47 @@ export default function Authentication() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-
-
-                        <div>
-                            <Button variant={formState === 0 ? "contained" : ""} onClick={() => { setFormState(0) }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
+                            {/* <img
+                                // src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+                                // alt="Video call illustration"
+                                style={{ width: 120, height: 120, borderRadius: 16, objectFit: 'cover', marginBottom: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.10)' }}
+                            /> */}
+                            <Avatar sx={{ bgcolor: 'primary.main', width: 60, height: 60 }}>
+                                <LockOutlinedIcon fontSize="large" />
+                            </Avatar>
+                        </Box>
+                        <Typography component="h1" variant="h4" sx={{ fontWeight: 700, color: '#1976d2', mb: 1.2, letterSpacing: 1 }}>
+                            Apna Video Call
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ color: '#444', mb: 2, fontWeight: 500, letterSpacing: 0.5 }}>
+                            Connect. Collaborate. Celebrate.
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#888', mb: 3, fontStyle: 'italic', textAlign: 'center', maxWidth: 340 }}>
+                            "Bringing people closer, no matter the distance. Start your journey with seamless video calls."
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                            <Button variant={formState === 0 ? "contained" : "outlined"} color="primary" size="large" sx={{ fontWeight: 600, borderRadius: 2 }} onClick={() => { setFormState(0) }}>
                                 Sign In
                             </Button>
-                            <Button variant={formState === 1 ? "contained" : ""} onClick={() => { setFormState(1) }}>
+                            <Button variant={formState === 1 ? "contained" : "outlined"} color="primary" size="large" sx={{ fontWeight: 600, borderRadius: 2 }} onClick={() => { setFormState(1) }}>
                                 Sign Up
                             </Button>
-                        </div>
-
-                        <Box component="form" noValidate sx={{ mt: 1 }}>
-                            {formState === 1 ? <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="username"
-                                label="Full Name"
-                                name="username"
-                                value={name}
-                                autoFocus
-                                onChange={(e) => setName(e.target.value)}
-                            /> : <></>}
-
+                        </Box>
+                        <Box component="form" noValidate sx={{ mt: 1, width: '100%', maxWidth: 400 }}>
+                            {formState === 1 && (
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="fullname"
+                                    label="Full Name"
+                                    name="fullname"
+                                    value={name}
+                                    autoFocus
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            )}
                             <TextField
                                 margin="normal"
                                 required
@@ -129,9 +145,8 @@ export default function Authentication() {
                                 label="Username"
                                 name="username"
                                 value={username}
-                                autoFocus
+                                autoFocus={formState === 0}
                                 onChange={(e) => setUsername(e.target.value)}
-
                             />
                             <TextField
                                 margin="normal"
@@ -142,34 +157,31 @@ export default function Authentication() {
                                 value={password}
                                 type="password"
                                 onChange={(e) => setPassword(e.target.value)}
-
                                 id="password"
                             />
-
-                            <p style={{ color: "red" }}>{error}</p>
-
+                            {error && <Typography sx={{ color: 'red', mt: 1, fontWeight: 500 }}>{error}</Typography>}
                             <Button
                                 type="button"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                color="primary"
+                                size="large"
+                                sx={{ mt: 3, mb: 2, fontWeight: 600, borderRadius: 2, fontSize: 18, py: 1.2 }}
                                 onClick={handleAuth}
                             >
-                                {formState === 0 ? "Login " : "Register"}
+                                {formState === 0 ? "Login" : "Register"}
                             </Button>
-
                         </Box>
                     </Box>
                 </Grid>
             </Grid>
-
             <Snackbar
-
                 open={open}
                 autoHideDuration={4000}
                 message={message}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                ContentProps={{ sx: { fontWeight: 600, fontSize: 16, color: '#1976d2', background: '#fff', border: '1px solid #1976d2' } }}
             />
-
         </ThemeProvider>
     );
 }
